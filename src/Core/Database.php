@@ -8,12 +8,12 @@ class Database
     {
         if (self::$connection === null) {
             $host = 'localhost';
-            $dbname = 'photosphere';
+            $dbname = 'library';
             $username = 'root';
             $password = ''; 
 
             try {
-                self::$connection = new PDO("mysql:host=$host;port=3307;dbname=$dbname;", $username, $password);
+                self::$connection = new PDO("mysql:host=$host;dbname=$dbname;", $username, $password);
                 self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
                 echo "it's not working!!!!";

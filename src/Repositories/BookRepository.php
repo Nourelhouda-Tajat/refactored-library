@@ -1,7 +1,7 @@
 <?php
-require_once '/../Core/Database.php';
-require_once '/../Entities/Book.php';
-require_once '/../Entities/Author.php';
+require_once __DIR__ . '/../Core/Database.php';
+require_once __DIR__ . '/../Entities/Book.php';
+require_once __DIR__ . '/../Entities/Author.php';
 
 class BookRepository{
     private $db;
@@ -13,8 +13,8 @@ class BookRepository{
     public function findAll(): array {
         $books = [];
         $stmt = $this->db->prepare( 
-            "SELECT b.title, b.price, b.stock, a.name FROM Book b
-            INNER JOIN Author a ON a.id=b.author_id ORDER BY b.id"
+        "SELECT b.*, a.id AS author_id, a.name, a.bio FROM Book b
+        INNER JOIN Author a ON a.id = b.author_id"
         );
         $stmt->execute();
         $result= $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -38,8 +38,8 @@ class BookRepository{
     }
     public function findByTitle($title): ?Book {
         $stmt = $this->db->prepare(
-            "SELECT b.title, b.price, b.stock, a.name FROM Book b
-            INNER JOIN Author a ON a.id=b.author_id WHERE b.title= :title"
+        "SELECT b.*, a.id AS author_id, a.name, a.bio FROM Book b
+        INNER JOIN Author a ON a.id = b.author_id WHERE b.title = :title"
         );
         $stmt->execute(["title" => $title]);
         $result=$stmt->fetch(PDO::FETCH_ASSOC);
@@ -47,7 +47,7 @@ class BookRepository{
             return null;
         } 
         $author = new Author(
-                $result['author_id'],
+                $result['id'],
                 $result['name'],
                 $result['bio']
             );
@@ -59,7 +59,7 @@ class BookRepository{
                 $result['price'],
                 $result['stock']
             );
-
+        return $book;
     }
 
     public function save(Book $book) : bool {
