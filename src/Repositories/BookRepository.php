@@ -36,19 +36,43 @@ class BookRepository{
 
         return $books; 
     }
-    public function findByTitle($title): Book {
+    public function findByTitle($title): ?Book {
         $stmt = $this->db->prepare(
             "SELECT b.title, b.price, b.stock, a.name FROM Book b
             INNER JOIN Author a ON a.id=b.author_id WHERE b.title= :title"
         );
         $stmt->execute(["title" => $title]);
-        $stmt->fetch();
+        $result=$stmt->fetch(PDO::FETCH_ASSOC);
+        if(!$result){
+            return null;
+        } 
+        $author = new Author(
+                $result['author_id'],
+                $result['name'],
+                $result['bio']
+            );
+
+            $book = new Book(
+                $result['id'],
+                $result['title'],
+                $author,
+                $result['price'],
+                $result['stock']
+            );
 
     }
+
     public function save(Book $book) : bool {
         $stmt = $this->db->prepare(
-           
+            "INSERT INTO Book (title, price, stock, author_id)
+             VALUES (:title, :price, :stock, :author_id)"
         );
+        return $stmt->execute([
+            'title'=> $book['title'], 
+            'price'=> $book['price'], 
+            'stock'=> $book['stock'], 
+            'author_id'=> $book['author_id']
+        ]);
     }
 }
 ?>
