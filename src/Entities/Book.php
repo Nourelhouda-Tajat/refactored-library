@@ -1,6 +1,6 @@
 <?php
 class Book{
-    private int $id;
+    private ?int $id;
     private string $title;
     private Author $author;
     private float $price;
@@ -19,12 +19,6 @@ class Book{
     public function getAuthor() {return $this->author;}
     public function getPrice() {return $this->price;}
     public function getStock() {return $this->stock;}
-    
-    public function setId($id){$this->id=$id;}
-    public function setTitle($title){$this->title=$title;}
-    public function setAuthor($author){$this->author=$author;}
-    public function setPrice($price){ $this->price=$price;}
-    public function setStock($stock){ $this->stock=$stock;}
 
 }
 ?>

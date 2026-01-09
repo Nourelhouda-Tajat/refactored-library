@@ -8,5 +8,5 @@ $books = $service->displayBooks();
 $book = $service->searchByTitle("1984");
 
 if ($book) {
-    echo "Trouvé via service : " . $book->getTitle();
+    echo "Trouvé : " . $book->getTitle();
 }

@@ -14,9 +14,6 @@ class Author{
     public function getName(){return $this->name;}
     public function getBio(){return $this->bio;}
 
-    public function setId(){ $this->id= $id;}
-    public function setName(){ $this->name= $name;}
-    public function setBio(){ $this->bio =$bio;}
     
 }
 ?>

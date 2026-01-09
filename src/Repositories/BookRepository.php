@@ -62,16 +62,26 @@ class BookRepository{
         return $book;
     }
 
-    public function save(Book $book) : bool {
+    public function save(Book $book)  {
+        if (empty($book->getTitle())){
+            throw new Exception("Title est vide");
+        }
+        if ($book->getPrice() <= 0) {
+            throw new Exception("Prix invalide");
+        }
+
+        if ($book->getStock() < 0) {
+            throw new Exception("Le stock doit être positive");
+        }
         $stmt = $this->db->prepare(
             "INSERT INTO Book (title, price, stock, author_id)
              VALUES (:title, :price, :stock, :author_id)"
         );
         return $stmt->execute([
-            'title'=> $book['title'], 
-            'price'=> $book['price'], 
-            'stock'=> $book['stock'], 
-            'author_id'=> $book['author_id']
+            'title' => $book->getTitle(), 
+            'price' => $book->getPrice(), 
+            'stock' =>$book->getStock(), 
+            'author_id' =>$book->getId()
         ]);
     }
 }
